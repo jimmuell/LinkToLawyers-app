@@ -5,6 +5,23 @@ import * as SplashScreen from "expo-splash-screen";
 
 import { AuthProvider, useAuth } from "@/context/supabase-provider";
 
+// Disable Reanimated strict mode warnings by overriding console.warn
+if (__DEV__) {
+	const originalWarn = console.warn;
+	console.warn = (...args) => {
+		const message = args[0];
+		if (
+			typeof message === "string" &&
+			(message.includes("[Reanimated]") ||
+				message.includes("Reading from `value`") ||
+				message.includes("Writing to `value`"))
+		) {
+			return; // Suppress Reanimated warnings
+		}
+		originalWarn.apply(console, args);
+	};
+}
+
 SplashScreen.preventAutoHideAsync();
 
 SplashScreen.setOptions({

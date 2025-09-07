@@ -56,8 +56,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
 			last_name: lastName,
 			display_name: fullName || "", // This will be stored in raw_user_meta_data
 		};
-		
-		console.log('Supabase signUp - sending user data:', userData);
+
+		// console.log("Supabase signUp - sending user data:", userData);
 
 		const { data, error } = await supabase.auth.signUp({
 			email,
@@ -74,9 +74,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
 		if (data.session) {
 			setSession(data.session);
-			console.log("User signed up:", data.user);
+			// console.log("User signed up:", data.user);
 		} else {
-			console.log("No user returned from sign up");
+			// console.log("No user returned from sign up");
 		}
 	};
 
@@ -93,9 +93,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
 		if (data.session) {
 			setSession(data.session);
-			console.log("User signed in:", data.user);
+			// console.log("User signed in:", data.user);
 		} else {
-			console.log("No user returned from sign in");
+			// console.log("No user returned from sign in");
 		}
 	};
 
@@ -106,7 +106,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 			console.error("Error signing out:", error);
 			return;
 		} else {
-			console.log("User signed out");
+			// console.log("User signed out");
 		}
 	};
 

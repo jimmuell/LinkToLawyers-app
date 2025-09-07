@@ -71,15 +71,19 @@ export default function SignUp() {
 
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		try {
-			console.log('Signing up with role:', selectedRole);
-			console.log('Form data:', { email: data.email, fullName: data.fullName, role: selectedRole });
-			
+			// console.log("Signing up with role:", selectedRole);
+			// console.log("Form data:", {
+			// 	email: data.email,
+			// 	fullName: data.fullName,
+			// 	role: selectedRole,
+			// });
+
 			await signUp(data.email, data.password, data.fullName, selectedRole);
 
 			form.reset();
 		} catch (error: Error | any) {
-			console.error('Sign up error:', error.message);
-			console.error('Full error:', error);
+			console.error("Sign up error:", error.message);
+			console.error("Full error:", error);
 		}
 	}
 
