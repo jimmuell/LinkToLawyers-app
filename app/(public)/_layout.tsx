@@ -10,6 +10,25 @@ export default function PublicLayout() {
 		<Stack screenOptions={{ headerShown: false, gestureEnabled: false }}>
 			<Stack.Screen name="welcome" />
 			<Stack.Screen
+				name="role-selection"
+				options={{
+					presentation: "modal",
+					headerShown: true,
+					headerTitle: "Choose Role",
+					headerStyle: {
+						backgroundColor:
+							colorScheme === "dark"
+								? colors.dark.background
+								: colors.light.background,
+					},
+					headerTintColor:
+						colorScheme === "dark"
+							? colors.dark.foreground
+							: colors.light.foreground,
+					gestureEnabled: true,
+				}}
+			/>
+			<Stack.Screen
 				name="sign-up"
 				options={{
 					presentation: "modal",

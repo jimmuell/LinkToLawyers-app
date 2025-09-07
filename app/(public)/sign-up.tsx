@@ -1,14 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { ActivityIndicator, View } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 import * as z from "zod";
 
 import { SafeAreaView } from "@/components/safe-area-view";
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormInput } from "@/components/ui/form";
 import { Text } from "@/components/ui/text";
-import { H1 } from "@/components/ui/typography";
+import { H1, Muted } from "@/components/ui/typography";
 import { useAuth } from "@/context/supabase-provider";
+import type { UserRole } from "@/lib/database.utils";
 
 const formSchema = z
 	.object({
@@ -40,31 +42,56 @@ const formSchema = z
 
 export default function SignUp() {
 	const { signUp } = useAuth();
+	const params = useLocalSearchParams<{ role: UserRole }>();
+	const selectedRole = params.role || "client";
+
+	// Get role display name
+	const getRoleDisplayName = (role: UserRole) => {
+		switch (role) {
+			case "client":
+				return "Client";
+			case "attorney":
+				return "Attorney";
+			case "admin":
+				return "Administrator";
+			default:
+				return "Client";
+		}
+	};
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			fullName: "",
 			email: "",
-			password: "",
-			confirmPassword: "",
+			password: "123456aA$",
+			confirmPassword: "123456aA$",
 		},
 	});
 
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		try {
-			await signUp(data.email, data.password, data.fullName);
+			console.log('Signing up with role:', selectedRole);
+			console.log('Form data:', { email: data.email, fullName: data.fullName, role: selectedRole });
+			
+			await signUp(data.email, data.password, data.fullName, selectedRole);
 
 			form.reset();
 		} catch (error: Error | any) {
-			console.error(error.message);
+			console.error('Sign up error:', error.message);
+			console.error('Full error:', error);
 		}
 	}
 
 	return (
 		<SafeAreaView className="flex-1 bg-background p-4" edges={["bottom"]}>
 			<View className="flex-1 gap-4 web:m-4">
-				<H1 className="self-start">Sign Up</H1>
+				<View className="gap-2">
+					<H1 className="self-start">Sign Up</H1>
+					<Muted className="self-start">
+						Creating account as: {getRoleDisplayName(selectedRole)}
+					</Muted>
+				</View>
 				<Form {...form}>
 					<View className="gap-4">
 						<FormField

@@ -31,7 +31,7 @@ export default function WelcomeScreen() {
 					size="default"
 					variant="default"
 					onPress={() => {
-						router.push("/sign-up");
+						router.push("/role-selection");
 					}}
 				>
 					<Text>Sign Up</Text>
