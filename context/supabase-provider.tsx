@@ -32,10 +32,23 @@ export function AuthProvider({ children }: PropsWithChildren) {
 	const [initialized, setInitialized] = useState(false);
 	const [session, setSession] = useState<Session | null>(null);
 
-	const signUp = async (email: string, password: string) => {
+	const signUp = async (email: string, password: string, fullName?: string) => {
+		// Parse the full name into first and last name
+		const nameParts = fullName?.trim().split(/\s+/) || [];
+		const firstName = nameParts[0] || "";
+		const lastName = nameParts.slice(1).join(" ") || "";
+
 		const { data, error } = await supabase.auth.signUp({
 			email,
 			password,
+			options: {
+				data: {
+					full_name: fullName || "",
+					first_name: firstName,
+					last_name: lastName,
+					display_name: fullName || "", // This will be stored in raw_user_meta_data
+				}
+			}
 		});
 
 		if (error) {

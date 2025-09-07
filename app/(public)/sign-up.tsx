@@ -12,6 +12,7 @@ import { useAuth } from "@/context/supabase-provider";
 
 const formSchema = z
 	.object({
+		fullName: z.string().min(2, "Please enter your full name."),
 		email: z.string().email("Please enter a valid email address."),
 		password: z
 			.string()
@@ -43,6 +44,7 @@ export default function SignUp() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
+			fullName: "",
 			email: "",
 			password: "",
 			confirmPassword: "",
@@ -51,7 +53,7 @@ export default function SignUp() {
 
 	async function onSubmit(data: z.infer<typeof formSchema>) {
 		try {
-			await signUp(data.email, data.password);
+			await signUp(data.email, data.password, data.fullName);
 
 			form.reset();
 		} catch (error: Error | any) {
@@ -65,6 +67,20 @@ export default function SignUp() {
 				<H1 className="self-start">Sign Up</H1>
 				<Form {...form}>
 					<View className="gap-4">
+						<FormField
+							control={form.control}
+							name="fullName"
+							render={({ field }) => (
+								<FormInput
+									label="Full Name"
+									placeholder="Enter your full name"
+									autoCapitalize="words"
+									autoComplete="name"
+									autoCorrect={false}
+									{...field}
+								/>
+							)}
+						/>
 						<FormField
 							control={form.control}
 							name="email"
